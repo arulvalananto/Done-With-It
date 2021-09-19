@@ -4,7 +4,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import colors from "../config/colors";
 import CustomText from "./CustomText.component";
 
-const Card = ({ title, price, image }) => {
+const Card = ({ title, subTitle, image }) => {
   return (
     <View style={styles.card}>
       <Image
@@ -15,7 +15,7 @@ const Card = ({ title, price, image }) => {
       />
       <View style={styles.detailsContainer}>
         <CustomText style={styles.title}>{title}</CustomText>
-        <CustomText style={styles.price}>{price}</CustomText>
+        <CustomText style={styles.subTitle}>{subTitle}</CustomText>
       </View>
     </View>
   );
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: colors.white,
     overflow: "hidden",
+    marginBottom: 15,
   },
   cardImage: {
     width: "100%",
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 7,
   },
-  price: {
+  subTitle: {
     color: colors.secondary,
     fontWeight: "bold",
   },
