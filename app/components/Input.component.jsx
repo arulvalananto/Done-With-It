@@ -1,35 +1,25 @@
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import defaultStyles from "../config/styles";
 
-const Input = ({
-  icon,
-  placeholder,
-  onChangeText,
-  value,
-  secureTextEntry = false,
-  style,
-  iconSize = 20,
-  iconColor = defaultStyles.colors.medium,
-}) => {
+const Input = ({ icon, style, ...otherProps }) => {
   return (
     <View style={styles.container}>
       {icon && (
         <MaterialCommunityIcons
           name={icon}
-          size={iconSize}
-          color={iconColor}
+          size={20}
+          color={defaultStyles.colors.medium}
           style={styles.icon}
         />
       )}
       <TextInput
         style={[defaultStyles.text, style]}
-        placeholder={placeholder}
-        onChangeText={onChangeText}
-        value={value}
-        secureTextEntry={secureTextEntry ? true : false}
+        autoCorrect={false}
+        autoCapitalize="none"
+        {...otherProps}
       />
     </View>
   );

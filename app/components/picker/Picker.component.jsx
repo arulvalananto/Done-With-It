@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import defaultStyles from "../config/styles";
-import CustomText from "./CustomText.component";
-import SafeScreen from "./SafeScreen.component";
-import PicketItem from "./PicketItem.component";
+import CustomText from "../CustomText.component";
+import SafeScreen from "../SafeScreen.component";
+import PicketItem from "./PickerItem.component";
+import defaultStyles from "../../config/styles";
 
 const Picker = ({
   icon,
@@ -37,9 +37,11 @@ const Picker = ({
               style={styles.icon}
             />
           )}
-          <CustomText style={styles.text}>
-            {selectedItem ? selectedItem.label : placeholder}
-          </CustomText>
+          {selectedItem ? (
+            <CustomText style={styles.text}>{selectedItem.label}</CustomText>
+          ) : (
+            <CustomText style={styles.placeholder}>{placeholder}</CustomText>
+          )}
           <MaterialCommunityIcons
             name="chevron-down"
             size={30}
@@ -89,5 +91,10 @@ const styles = StyleSheet.create({
     flex: 1,
     textTransform: "capitalize",
     fontWeight: "bold",
+    color: defaultStyles.colors.dark,
+  },
+  placeholder: {
+    flex: 1,
+    color: defaultStyles.colors.medium,
   },
 });

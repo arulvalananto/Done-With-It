@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text } from "react-native";
 
 const CustomText = ({ children, style }) => {
   return <Text style={[styles.text, style]}>{children}</Text>;

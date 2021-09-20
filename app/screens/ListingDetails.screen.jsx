@@ -1,8 +1,8 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 import CustomText from "../components/CustomText.component";
-import ListItem from "../components/ListItem.component";
+import ListItem from "../components/lists/ListItem.component";
 import colors from "../config/colors";
 
 const ListingDetails = () => {
