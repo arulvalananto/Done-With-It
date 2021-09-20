@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 
-import CustomButton from "../components/CustomButton.component";
+import CustomButton from "../components/Button.component";
 
 const Welcome = () => {
   return (

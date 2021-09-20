@@ -4,7 +4,14 @@ import { useFormikContext } from "formik";
 import Picker from "../picker/Picker.component";
 import FormError from "./FormError.component";
 
-function FormPicker({ items, name, placeholder }) {
+function FormPicker({
+  items,
+  name,
+  numberOfColumns,
+  placeholder,
+  PickerItemComponent,
+  width,
+}) {
   const { errors, setFieldValue, touched, values } = useFormikContext();
 
   return (
@@ -14,6 +21,9 @@ function FormPicker({ items, name, placeholder }) {
         onSelectItem={(item) => setFieldValue(name, item)}
         placeholder={placeholder}
         selectedItem={values[name]}
+        width={width}
+        PickerItemComponent={PickerItemComponent}
+        numberOfColumns={numberOfColumns}
       />
       <FormError error={errors[name]} visible={touched[name]} />
     </>

@@ -2,7 +2,7 @@ import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 
 import colors from "../config/colors";
-import CustomText from "./CustomText.component";
+import Text from "./Text.component";
 
 const Card = ({ title, subTitle, image }) => {
   return (
@@ -14,8 +14,12 @@ const Card = ({ title, subTitle, image }) => {
         fadeDuration={1000}
       />
       <View style={styles.detailsContainer}>
-        <CustomText style={styles.title}>{title}</CustomText>
-        <CustomText style={styles.subTitle}>{subTitle}</CustomText>
+        <Text style={styles.title} numberOfLines={1}>
+          {title}
+        </Text>
+        <Text style={styles.subTitle} numberOfLines={2}>
+          {subTitle}
+        </Text>
       </View>
     </View>
   );

@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import colors from "../config/colors";
 
-const CustomButton = ({ children, onPress, secondary }) => {
+const Button = ({ children, onPress, secondary }) => {
   return (
     <TouchableOpacity
       style={[
@@ -17,7 +17,7 @@ const CustomButton = ({ children, onPress, secondary }) => {
   );
 };
 
-export default CustomButton;
+export default Button;
 
 const styles = StyleSheet.create({
   button: {
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     padding: 15,
     width: "100%",
     marginVertical: 10,
+    color: colors.dark,
   },
   text: {
     color: "#fff",

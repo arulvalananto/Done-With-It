@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Button,
   FlatList,
   Modal,
   StyleSheet,
@@ -9,26 +8,30 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import CustomText from "../CustomText.component";
-import SafeScreen from "../SafeScreen.component";
-import PicketItem from "./PickerItem.component";
 import defaultStyles from "../../config/styles";
+import { PickerItem } from "../picker";
+import Text from "../Text.component";
+import SafeScreen from "../SafeScreen.component";
+import Button from "../Button.component";
 
 const Picker = ({
   icon,
-  placeholder,
   iconSize = 20,
   iconColor = defaultStyles.colors.medium,
   items,
-  selectedItem,
+  numberOfColumns = 1,
   onSelectItem,
+  placeholder,
+  PickerItemComponent = PickerItem,
+  selectedItem,
+  width = "100%",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)}>
-        <View style={styles.container}>
+        <View style={[styles.container, { width }]}>
           {icon && (
             <MaterialCommunityIcons
               name={icon}
@@ -38,9 +41,9 @@ const Picker = ({
             />
           )}
           {selectedItem ? (
-            <CustomText style={styles.text}>{selectedItem.label}</CustomText>
+            <Text style={styles.text}>{selectedItem.label}</Text>
           ) : (
-            <CustomText style={styles.placeholder}>{placeholder}</CustomText>
+            <Text style={styles.placeholder}>{placeholder}</Text>
           )}
           <MaterialCommunityIcons
             name="chevron-down"
@@ -52,12 +55,16 @@ const Picker = ({
       </TouchableWithoutFeedback>
       <Modal visible={isOpen} animationType="slide">
         <SafeScreen>
-          <Button title="Close" onPress={() => setIsOpen(!isOpen)} />
+          <Button secondary onPress={() => setIsOpen(!isOpen)}>
+            Close
+          </Button>
           <FlatList
             data={items}
             keyExtractor={(items) => items.label}
+            numColumns={numberOfColumns}
             renderItem={({ item }) => (
-              <PicketItem
+              <PickerItemComponent
+                item={item}
                 label={item.label}
                 onPress={() => {
                   setIsOpen(false);
@@ -80,7 +87,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
     padding: 15,
     marginVertical: 10,
   },

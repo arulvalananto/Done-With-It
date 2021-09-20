@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import CustomText from "../CustomText.component";
 
-const PicketItem = ({ label, onPress }) => {
+import Text from "../Text.component";
+
+const PicketItem = ({ item, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <CustomText style={styles.text}>{label}</CustomText>
+      <Text style={styles.text}>{item.label}</Text>
     </TouchableOpacity>
   );
 };
