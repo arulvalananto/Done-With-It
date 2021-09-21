@@ -1,9 +1,11 @@
+import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
 
 import Card from "../components/Card.component";
 import SafeScreen from "../components/SafeScreen.component";
 import colors from "../config/colors";
+import routes from "../navigation/routes";
 
 const listings = [
   {
@@ -21,13 +23,20 @@ const listings = [
 ];
 
 const Home = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeScreen style={styles.container}>
       <FlatList
         data={listings}
         keyExtractor={(listings) => listings.id.toString()}
-        renderItem={({ item: { title, price, image } }) => (
-          <Card title={title} subTitle={"$" + price} image={image} />
+        renderItem={({ item }) => (
+          <Card
+            title={item.title}
+            subTitle={"$" + item.price}
+            image={item.image}
+            onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
+          />
         )}
       />
     </SafeScreen>

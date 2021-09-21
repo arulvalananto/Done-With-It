@@ -1,10 +1,12 @@
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/core";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
 import SafeScreen from "../components/SafeScreen.component";
 import Icon from "../components/Icon.component";
 import colors from "../config/colors";
+import routes from "../navigation/routes";
 
 const menuItems = [
   {
@@ -17,10 +19,13 @@ const menuItems = [
   {
     title: "My Messages",
     icon: { name: "email", backgroundColor: colors.secondary },
+    targetScreen: routes.MESSAGES,
   },
 ];
 
 const Account = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeScreen style={styles.screen}>
       <View style={styles.container}>
@@ -34,12 +39,13 @@ const Account = () => {
         <FlatList
           data={menuItems}
           keyExtractor={(menuItems) => menuItems.title}
-          renderItem={({ item: { title, icon } }) => (
+          renderItem={({ item: { title, icon, targetScreen } }) => (
             <ListItem
               title={title}
               IconComponent={
                 <Icon name={icon.name} backgroundColor={icon.backgroundColor} />
               }
+              onPress={() => navigation.navigate(targetScreen)}
             />
           )}
           ItemSeparatorComponent={ListItemSeparator}

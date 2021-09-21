@@ -1,9 +1,12 @@
 import React from "react";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/core";
 
-import CustomButton from "../components/Button.component";
+import Button from "../components/Button.component";
 
 const Welcome = () => {
+  const navigation = useNavigation();
+
   return (
     <ImageBackground
       source={require("../assets/background.jpg")}
@@ -15,8 +18,10 @@ const Welcome = () => {
         <Text style={styles.slogan}>Sell What You Don't Need</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <CustomButton>Login</CustomButton>
-        <CustomButton secondary>Sign Up</CustomButton>
+        <Button onPress={() => navigation.navigate("Login")}>Login</Button>
+        <Button secondary onPress={() => navigation.navigate("Register")}>
+          Sign Up
+        </Button>
       </View>
     </ImageBackground>
   );

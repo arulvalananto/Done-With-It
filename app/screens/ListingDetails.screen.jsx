@@ -1,17 +1,22 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
+import { useRoute } from "@react-navigation/core";
 
 import CustomText from "../components/Text.component";
 import ListItem from "../components/lists/ListItem.component";
 import colors from "../config/colors";
 
 const ListingDetails = () => {
+  const {
+    params: { title, price, image },
+  } = useRoute();
+
   return (
-    <View>
-      <Image style={styles.image} source={require("../assets/jacket.jpg")} />
+    <>
+      <Image style={styles.image} source={image} />
       <View style={styles.detailsContainer}>
-        <CustomText style={styles.title}>Red jacket for sale</CustomText>
-        <CustomText style={styles.subTitle}>$100</CustomText>
+        <CustomText style={styles.title}>{title}</CustomText>
+        <CustomText style={styles.subTitle}>${price}</CustomText>
         <View style={styles.userContainer}>
           <ListItem
             image={require("../assets/mosh.jpg")}
@@ -20,7 +25,7 @@ const ListingDetails = () => {
           />
         </View>
       </View>
-    </View>
+    </>
   );
 };
 
