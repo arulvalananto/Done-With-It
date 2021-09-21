@@ -6,7 +6,6 @@ import FormError from "./FormError.component";
 
 const FormField = ({ name, width, icon, ...otherProps }) => {
   const { setFieldTouched, handleChange, errors, touched } = useFormikContext();
-
   return (
     <>
       <Input

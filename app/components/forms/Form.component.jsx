@@ -4,8 +4,8 @@ import { Formik } from "formik";
 const Form = ({ initialValues, onSubmit, validationSchema, children }) => {
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
-      onSubmit={(values) => console.log(values)}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
       {() => <>{children}</>}

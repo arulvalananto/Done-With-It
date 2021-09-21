@@ -7,16 +7,11 @@ import {
   FormPicker as Picker,
   FormField,
   SubmitButton,
+  FormImagePicker as ImagePicker,
 } from "../components/forms";
 import SafeScreen from "../components/SafeScreen.component";
 import CategoryPickerItem from "../components/CategoryPickerItem.component";
-
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required().min(1).label("Title"),
-  price: Yup.number().required().min(1).max(10000).label("Price"),
-  description: Yup.string().label("Description"),
-  category: Yup.object().required().nullable().label("Category"),
-});
+import useLocation from "../hooks/useLocation";
 
 const categories = [
   {
@@ -75,7 +70,17 @@ const categories = [
   },
 ];
 
+const validationSchema = Yup.object().shape({
+  title: Yup.string().required().min(1).label("Title"),
+  price: Yup.number().required().min(1).max(10000).label("Price"),
+  description: Yup.string().label("Description"),
+  category: Yup.object().required().nullable().label("Category"),
+  images: Yup.array().min(1, "Please select at least one image"),
+});
+
 const ListingEdit = () => {
+  const location = useLocation();
+
   return (
     <SafeScreen style={styles.container}>
       <Form
@@ -84,8 +89,11 @@ const ListingEdit = () => {
           price: "",
           description: "",
           category: null,
+          images: [],
         }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => {
+          console.log(location);
+        }}
         validationSchema={validationSchema}
       >
         <FormField maxLength={255} name="title" placeholder="Title" autoFocus />
@@ -103,7 +111,9 @@ const ListingEdit = () => {
           placeholder="Category"
           PickerItemComponent={CategoryPickerItem}
           width="50%"
+          style={styles.picker}
         />
+        <ImagePicker name="images" />
         <FormField
           maxLength={255}
           multiline
@@ -122,5 +132,8 @@ export default ListingEdit;
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+  },
+  picker: {
+    marginRight: 10,
   },
 });

@@ -9,7 +9,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import defaultStyles from "../../config/styles";
-import { PickerItem } from "../picker";
+import PickerItem from "./PickerItem.component";
 import Text from "../Text.component";
 import SafeScreen from "../SafeScreen.component";
 import Button from "../Button.component";
@@ -25,13 +25,14 @@ const Picker = ({
   PickerItemComponent = PickerItem,
   selectedItem,
   width = "100%",
+  style,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setIsOpen(!isOpen)}>
-        <View style={[styles.container, { width }]}>
+        <View style={[styles.container, { width }, style]}>
           {icon && (
             <MaterialCommunityIcons
               name={icon}
