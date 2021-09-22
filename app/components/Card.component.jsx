@@ -9,12 +9,12 @@ import {
 import colors from "../config/colors";
 import Text from "./Text.component";
 
-const Card = ({ title, subTitle, image, onPress }) => {
+const Card = ({ title, subTitle, imageUrl, onPress }) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
         <Image
-          source={image}
+          source={{ uri: imageUrl }}
           style={styles.cardImage}
           resizeMode="cover"
           fadeDuration={1000}
