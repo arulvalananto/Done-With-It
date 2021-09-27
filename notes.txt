@@ -1,0 +1,24 @@
+Strategies for Offline Support:
+    - Notify the user
+    - Disable features
+    - Cache data
+    - Store user actions
+
+Caching Persistence Options:
+    - AsyncStorage
+    - SecureStore
+    - SQLite
+
+CACHE Layer:
+    - Serialize / deserialize (stringify, parse)
+    - Apply timestamp
+    - Remove expired items
+
+Here we have implemented cache without redux:
+if you are planning to implement cache with redux you have to use following parts in your project:
+    - Actions
+    - Action Types
+    - Reducers
+    - Middleware
+    - redux-thunk
+    - redux-persist

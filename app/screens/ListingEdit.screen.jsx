@@ -63,7 +63,7 @@ const ListingEdit = () => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <FormField maxLength={255} name="title" placeholder="Title" autoFocus />
+        <FormField maxLength={255} name="title" placeholder="Title" />
         <FormField
           keyboardType="numeric"
           maxLength={8}

@@ -1,5 +1,6 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Image } from "react-native-expo-image-cache";
 import { useRoute } from "@react-navigation/core";
 
 import CustomText from "../components/Text.component";
@@ -13,7 +14,12 @@ const ListingDetails = () => {
 
   return (
     <>
-      <Image style={styles.image} source={image} />
+      <Image
+        style={styles.image}
+        uri={image}
+        preview={{ uri: image }} // you can use thumbnail here with minimum size
+        tint="light"
+      />
       <View style={styles.detailsContainer}>
         <CustomText style={styles.title}>{title}</CustomText>
         <CustomText style={styles.subTitle}>${price}</CustomText>

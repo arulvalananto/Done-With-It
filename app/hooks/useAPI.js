@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const useAPI = ({ apiFunc }) => {
   const [data, setData] = useState([]);
@@ -9,10 +9,9 @@ const useAPI = ({ apiFunc }) => {
     const response = await apiFunc(...args);
     setLoading(false);
 
-    if (!response.ok) return setError(true);
-
-    setError(false);
+    setError(!response.ok);
     setData(response.data);
+    return response;
   };
 
   return { request, data, error, loading };

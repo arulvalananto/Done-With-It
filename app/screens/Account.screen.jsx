@@ -6,32 +6,26 @@ import { ListItem, ListItemSeparator } from "../components/lists";
 import SafeScreen from "../components/SafeScreen.component";
 import Icon from "../components/Icon.component";
 import colors from "../config/colors";
-import routes from "../navigation/routes";
-
-const menuItems = [
-  {
-    title: "My Listings",
-    icon: {
-      name: "format-list-bulleted",
-      backgroundColor: colors.primary,
-    },
-  },
-  {
-    title: "My Messages",
-    icon: { name: "email", backgroundColor: colors.secondary },
-    targetScreen: routes.MESSAGES,
-  },
-];
+import { useStateValue } from "../auth/context";
+import { actionTypes } from "../auth/reducer";
+import authStorage from "../auth/storage";
+import menuItems from "../data/menuItems";
 
 const Account = () => {
   const navigation = useNavigation();
+  const [{ user }, dispatch] = useStateValue();
+
+  const handleLogout = () => {
+    dispatch({ type: actionTypes.REMOVE_USER });
+    authStorage.removeToken();
+  };
 
   return (
     <SafeScreen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
-          title="Valan Anto"
-          subTitle="arulvalananto@github.io"
+          title={user ? user.name : "Valan Anto (Testing)"}
+          subTitle={user ? user.email : "arulvalananto@github.io (Testing)"}
           image={require("../assets/mosh.jpg")}
         />
       </View>
@@ -54,6 +48,7 @@ const Account = () => {
       <ListItem
         title="Log Out"
         IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+        onPress={handleLogout}
       />
     </SafeScreen>
   );
