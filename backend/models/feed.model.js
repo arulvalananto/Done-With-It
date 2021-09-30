@@ -10,7 +10,18 @@ const feedSchema = mongoose.Schema(
     category: {
       type: String,
       enum: {
-        values: [""],
+        values: [
+          "Furniture",
+          "Cars",
+          "Cameras",
+          "Games",
+          "Clothing",
+          "Sports",
+          "Movies & Music",
+          "Books",
+          "Digital Rights",
+          "Other",
+        ],
         message: "{VALUES} is not supported",
       },
     },

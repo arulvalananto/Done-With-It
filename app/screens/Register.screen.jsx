@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 
 import SafeScreen from "../components/SafeScreen.component";
 import { Form, FormField, SubmitButton } from "../components/forms";
-import usersApi from "../api/users";
-import authApi from "../api/auth";
 import FormError from "../components/forms/FormError.component";
-import useAPI from "../hooks/useAPI";
 import Loading from "../components/Loading.component";
+import Text from "../components/Text.component";
+import NavLink from "../components/NavLink.component";
+import requestApi from "../api/requests";
+import storage from "../utility/storage";
+import cache from "../utility/cache";
+import { userFetched } from "../redux/reducers/user.reducer";
 
 const validationSchema = Yup.object().shape({
   fullName: Yup.string().required().label("Full Name"),
@@ -17,27 +21,36 @@ const validationSchema = Yup.object().shape({
 });
 
 const Register = () => {
+  const dispatch = useDispatch();
+
   const [error, setError] = useState("");
-  const registerApi = useAPI(usersApi.register);
-  const loginApi = useAPI(authApi.login);
 
   const handleSubmit = async (userInfo) => {
-    const result = await registerApi.request(userInfo);
+    try {
+      // Send credentials to "/register" API
+      const response = await requestApi.register(userInfo);
+      if (!response.ok) return setError(response.data.message);
 
-    if (!result.ok) {
-      if (result.data) setError(result.data.error);
-      else {
-        setError("An unexpected error occured.");
-        console.log(result);
-      }
-      return;
+      // Store token into "Secure Storage"
+      await storage.storeToken(response.data.token);
+
+      // Send token to "/current-user" API
+      const result = await requestApi.getCurrentUser(response.data.token);
+      if (!result.ok) return setError(result.data.message);
+
+      // cache user details into "Async Storage"
+      await cache.store("/current-user", result.data.user);
+
+      // store it into global state and it automatically redirects to user page
+      dispatch(userFetched(result.data.user));
+    } catch (err) {
+      setError(err);
     }
-    const { data: authToken } = await loginApi.request(userInfo);
   };
 
   return (
     <>
-      <Loading visible={registerApi.loading || loginApi.loading} />
+      <Loading visible={false} />
       <SafeScreen style={styles.container}>
         <FormError message={error} visible={error} />
         <Form
@@ -50,7 +63,6 @@ const Register = () => {
             icon="account"
             placeholder="Full Name"
             textContentType="name"
-            autoFocus
           />
           <FormField
             name="email"
@@ -68,6 +80,9 @@ const Register = () => {
           />
           <SubmitButton title="Register" />
         </Form>
+        <Text style={styles.navLink}>
+          Already user? <NavLink to="Login">login</NavLink>
+        </Text>
       </SafeScreen>
     </>
   );
@@ -83,5 +98,11 @@ const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 80,
+  },
+  navLink: {
+    width: "100%",
+    textAlign: "center",
+    marginVertical: 15,
+    fontWeight: "600",
   },
 });

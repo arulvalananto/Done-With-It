@@ -19,11 +19,6 @@ const getToken = async () => {
   }
 };
 
-const getUser = async () => {
-  const token = await getToken();
-  return token ? jwtDecode(token) : null;
-};
-
 const removeToken = async () => {
   try {
     await SecureStore.deleteItemAsync(key);
@@ -32,4 +27,4 @@ const removeToken = async () => {
   }
 };
 
-export default { getToken, getUser, removeToken, storeToken };
+export default { getToken, removeToken, storeToken };

@@ -2,6 +2,8 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import LottieView from "lottie-react-native";
 
+import colors from "../config/colors";
+
 const Loading = ({ visible }) => {
   if (!visible) return null;
 
@@ -19,7 +21,7 @@ export default Loading;
 
 const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: "white",
+    backgroundColor: colors.white,
     height: "100%",
     width: "100%",
     zIndex: 1,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import * as Yup from "yup";
 
 import {
@@ -13,8 +13,8 @@ import SafeScreen from "../components/SafeScreen.component";
 import CategoryPickerItem from "../components/CategoryPickerItem.component";
 import useLocation from "../hooks/useLocation";
 import categories from "../data/categories";
-import listingsApi from "../api/listings";
 import UploadScreen from "./Upload.screen";
+import requestApi from "../api/requests";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -32,17 +32,20 @@ const ListingEdit = () => {
   const handleSubmit = async (values, { resetForm }) => {
     setProgress(0);
     setUploadVisible(true);
-    const result = await listingsApi.addListings(
+
+    const result = await requestApi.addFeed(
       { ...values, location },
       (progress) => setProgress(progress)
     );
 
+    console.log(result);
+
     if (!result.ok) {
       setUploadVisible(false);
-      return alert("Could not save the listing");
+      return Alert.alert(result.problem, "Couldn't able to adding feed");
     }
 
-    resetForm(); // it's inside formikBAG on OnSubmit function
+    resetForm(); // it's inside formikBAG on OnSubmit fun
   };
 
   return (

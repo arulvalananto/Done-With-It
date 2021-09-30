@@ -1,31 +1,39 @@
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/core";
+import { useDispatch, useSelector } from "react-redux";
 
 import { ListItem, ListItemSeparator } from "../components/lists";
 import SafeScreen from "../components/SafeScreen.component";
 import Icon from "../components/Icon.component";
 import colors from "../config/colors";
-import { useStateValue } from "../auth/context";
-import { actionTypes } from "../auth/reducer";
-import authStorage from "../auth/storage";
+import storage from "../utility/storage";
 import menuItems from "../data/menuItems";
+import { userRemoved } from "../redux/reducers/user.reducer";
+import cache from "../utility/cache";
 
 const Account = () => {
   const navigation = useNavigation();
-  const [{ user }, dispatch] = useStateValue();
 
-  const handleLogout = () => {
-    dispatch({ type: actionTypes.REMOVE_USER });
-    authStorage.removeToken();
+  const { user } = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    try {
+      dispatch(userRemoved());
+      await storage.removeToken();
+      await cache.remove();
+    } catch (err) {
+      alert(err);
+    }
   };
 
   return (
     <SafeScreen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
-          title={user ? user.name : "Valan Anto (Testing)"}
-          subTitle={user ? user.email : "arulvalananto@github.io (Testing)"}
+          title={user?.fullName}
+          subTitle={user?.email}
           image={require("../assets/mosh.jpg")}
         />
       </View>

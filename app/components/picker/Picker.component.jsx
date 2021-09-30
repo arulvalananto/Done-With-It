@@ -8,16 +8,17 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import defaultStyles from "../../config/styles";
+import colors from "../../config/colors";
 import PickerItem from "./PickerItem.component";
 import Text from "../Text.component";
 import SafeScreen from "../SafeScreen.component";
 import Button from "../Button.component";
+import Icon from "../Icon.component";
 
 const Picker = ({
   icon,
   iconSize = 20,
-  iconColor = defaultStyles.colors.medium,
+  iconColor = colors.medium,
   items,
   numberOfColumns = 1,
   onSelectItem,
@@ -56,8 +57,14 @@ const Picker = ({
       </TouchableWithoutFeedback>
       <Modal visible={isOpen} animationType="slide">
         <SafeScreen>
-          <Button secondary onPress={() => setIsOpen(!isOpen)}>
-            Close
+          <Button onPress={() => setIsOpen(!isOpen)} style={styles.close}>
+            <Icon
+              name="close"
+              backgroundColor={colors.white}
+              color={colors.black}
+              style={styles.closeIcon}
+              size={45}
+            />
           </Button>
           <FlatList
             data={items}
@@ -84,7 +91,7 @@ export default Picker;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: defaultStyles.colors.light,
+    backgroundColor: colors.light,
     borderRadius: 25,
     flexDirection: "row",
     alignItems: "center",
@@ -98,10 +105,19 @@ const styles = StyleSheet.create({
     flex: 1,
     textTransform: "capitalize",
     fontWeight: "bold",
-    color: defaultStyles.colors.dark,
+    color: colors.dark,
   },
   placeholder: {
     flex: 1,
-    color: defaultStyles.colors.medium,
+    color: colors.medium,
+  },
+  close: {
+    backgroundColor: colors.white,
+  },
+  closeIcon: {
+    elevation: 5,
+    shadowColor: "black",
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
   },
 });

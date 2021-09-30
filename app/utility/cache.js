@@ -36,13 +36,19 @@ const get = async (key) => {
       await AsyncStorage.removeItem(prefix + key);
       return null;
     }
-    // Scenario 3 -
+    return item.value;
   } catch (error) {
     console.log(error);
   }
 };
 
+const remove = async (key) => {
+  await AsyncStorage.removeItem(prefix + key);
+  return true;
+};
+
 export default {
   store,
   get,
+  remove,
 };

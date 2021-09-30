@@ -1,3 +1,6 @@
+import colors from "../config/colors";
+import routes from "../navigation/routes";
+
 const menuItems = [
   {
     title: "My Listings",

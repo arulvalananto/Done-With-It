@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const userSchema = mongoose.Schema({
-  name: {
+  fullName: {
     type: String,
     required: [true, "User must have a name"],
   },
@@ -18,6 +18,7 @@ const userSchema = mongoose.Schema({
     required: [true, "Account must have a password"],
     select: false,
   },
+  pushNotificationToken: { type: String },
   feeds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Feeds" }],
 });
 

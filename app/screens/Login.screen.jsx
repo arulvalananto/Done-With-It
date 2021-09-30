@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
-import jwtDecode from "jwt-decode";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
-import { Form, FormField, SubmitButton, FormError } from "../components/forms";
+import { Form, FormField, SubmitButton } from "../components/forms";
+import FormError from "../components/forms/FormError.component";
+import Text from "../components/Text.component";
 import SafeScreen from "../components/SafeScreen.component";
-import { useStateValue } from "../auth/context";
-import authApi from "../api/auth";
-import { actionTypes } from "../auth/reducer";
-import authStorage from "../auth/storage";
+import NavLink from "../components/NavLink.component";
+import requestApi from "../api/requests";
+import storage from "../utility/storage";
+import cache from "../utility/cache";
+import { userFetched } from "../redux/reducers/user.reducer";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -16,25 +19,30 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
-  const [submitError, setSubmitError] = useState("");
-  const [loginFailed, setLoginFailed] = useState(false);
-  const [state, dispatch] = useStateValue();
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = async (values) => {
-    const result = await authApi.login(values);
+    try {
+      // Send credentials to "/login" API
+      const response = await requestApi.login(values);
+      if (!response.ok) return setError(response.data.message);
 
-    if (!result.ok) {
-      setSubmitError("Invalid email and/or password");
-      setLoginFailed(true);
-      return;
+      // Store token into "Secure Storage"
+      await storage.storeToken(response.data.token);
+
+      // Send token to "/current-user" API
+      const result = await requestApi.getCurrentUser(response.data.token);
+      if (!result.ok) return setError(result.data.message);
+
+      // cache user details into "Async Storage"
+      await cache.store("/current-user", result.data.user);
+
+      // store it into global state and it automatically redirects to user page
+      dispatch(userFetched(result.data.user));
+    } catch (err) {
+      setError(err);
     }
-    setLoginFailed(false);
-    const user = jwtDecode(result.data);
-    dispatch({
-      type: actionTypes.FETCH_USER,
-      user,
-    });
-    authStorage.storeToken(result.data);
   };
 
   return (
@@ -42,19 +50,18 @@ const Login = () => {
       <View style={styles.logoContainer}>
         <Image source={require("../assets/logo-red.png")} style={styles.logo} />
       </View>
+      <FormError message={error} visible={error} />
       <Form
         initialValues={{ email: "", password: "" }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <FormError message={submitError} visible={loginFailed} />
         <FormField
           name="email"
           icon="email"
           placeholder="Email"
           textContentType="emailAddress"
           keyboardType="email-address"
-          autoFocus
         />
         <FormField
           name="password"
@@ -65,6 +72,9 @@ const Login = () => {
         />
         <SubmitButton title="Login" />
       </Form>
+      <Text style={styles.navLink}>
+        New User? <NavLink to="Register">register</NavLink>
+      </Text>
     </SafeScreen>
   );
 };
@@ -83,5 +93,11 @@ const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 80,
+  },
+  navLink: {
+    width: "100%",
+    textAlign: "center",
+    marginVertical: 15,
+    fontWeight: "600",
   },
 });

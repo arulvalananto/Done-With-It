@@ -3,12 +3,13 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import colors from "../config/colors";
 
-const Button = ({ children, onPress, secondary }) => {
+const Button = ({ children, onPress, secondary, style }) => {
   return (
     <TouchableOpacity
       style={[
         styles.button,
         { backgroundColor: secondary ? colors.secondary : colors.primary },
+        style,
       ]}
       onPress={onPress}
     >

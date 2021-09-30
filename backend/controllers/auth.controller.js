@@ -6,13 +6,23 @@ const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const sendMail = require("../utils/sendMail");
 
-const _signToken = (user) => {
-  const payload = { _id: user._id, name: user.name, email: user.email };
-
-  return jwt.sign(payload, process.env.JWT_SECRET, {
+const _signToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRY,
   });
 };
+
+exports.register = catchAsync(async (req, res) => {
+  const { fullName, email, password } = req.body;
+
+  const hashPassword = await bcrypt.hash(password, 12);
+
+  const user = await User.create({ fullName, email, password: hashPassword });
+
+  const token = _signToken(user._id);
+
+  res.status(201).json({ message: "User created", token });
+});
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -22,28 +32,24 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Invalid email and/or password", 401));
   }
 
-  const token = _signToken(user);
+  const token = _signToken(user._id);
 
   res.status(200).json({ message: "Logged in", token });
 });
 
-exports.register = catchAsync(async (req, res) => {
-  const { name, email, password } = req.body;
+exports.getCurrentUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return next(new AppError("No user found!", 404));
+  }
 
-  const hashPassword = await bcrypt.hash(password, 12);
-
-  const user = await User.create({ name, email, password: hashPassword });
-
-  const token = _signToken(user);
-
-  res.status(201).json({ message: "User created", token });
+  res.status(200).json({ message: "User retrieved", user });
 });
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });
-
   if (!user) {
     return next(
       new AppError(
@@ -66,4 +72,16 @@ exports.resetPassword = catchAsync(async (req, res, next) => {});
 
 exports.changePassword = catchAsync(async (req, res, next) => {
   const { password, newPassword } = req.body;
+
+  const hashPassword = await bcrypt.hash(newPassword, 12);
+
+  const user = await User.findById(req.user.id).select("+password");
+  if (!user || !(await user.checkPassword(password, user.password))) {
+    return next(new AppError("No user found and/or Invalid Password", 404));
+  }
+
+  user.password = hashPassword;
+  await user.save();
+
+  res.status(200).json({ message: "Password changed" });
 });

@@ -22,3 +22,15 @@ if you are planning to implement cache with redux you have to use following part
     - Middleware
     - redux-thunk
     - redux-persist
+
+Push Notification Services:
+    - Expo's Push Notification Service
+    - One Signal
+    - Firebase Cloud Messaging
+    - Amazon's Simple Notification Service (SNS)
+
+Push Notification Steps:
+    1. Register the app to get a token.
+    2. Store the token on the server.
+    3. Send a notification.
+    4. Handle received notifications.
