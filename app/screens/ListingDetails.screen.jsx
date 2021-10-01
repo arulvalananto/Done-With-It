@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { Image } from "react-native-expo-image-cache";
 import { useRoute } from "@react-navigation/core";
 
@@ -7,27 +7,39 @@ import CustomText from "../components/Text.component";
 import ListItem from "../components/lists/ListItem.component";
 import colors from "../config/colors";
 
+const prefix = "http://192.168.1.5:5000/uploads/";
+
 const ListingDetails = () => {
   const {
-    params: { title, price, image },
+    params: {
+      title,
+      price,
+      description,
+      category,
+      createdBy,
+      createdAt,
+      images,
+    },
   } = useRoute();
+  console.log(prefix + images[0]);
 
   return (
     <>
       <Image
         style={styles.image}
-        uri={image}
-        preview={{ uri: image }} // you can use thumbnail here with minimum size
+        uri={prefix + images[0]}
+        preview={{ uri: prefix + images[0] }} // you can use thumbnail here with minimum size
         tint="light"
       />
       <View style={styles.detailsContainer}>
         <CustomText style={styles.title}>{title}</CustomText>
         <CustomText style={styles.subTitle}>${price}</CustomText>
+        <CustomText style={styles.description}>{description}</CustomText>
         <View style={styles.userContainer}>
           <ListItem
             image={require("../assets/mosh.jpg")}
-            title="Valan Anto"
-            subTitle="5 Listings"
+            title={createdBy.fullName}
+            subTitle={`${createdBy.feeds.length} Listings`}
           />
         </View>
       </View>

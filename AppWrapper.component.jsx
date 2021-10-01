@@ -49,6 +49,8 @@ const AppWrapper = () => {
     }
   };
 
+  console.log(state);
+
   if (!isReady)
     return (
       <AppLoading

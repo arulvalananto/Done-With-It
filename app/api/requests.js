@@ -42,9 +42,25 @@ const addFeed = async (feed, progress) => {
   });
 };
 
+const retrieveFeeds = async () => {
+  const token = await storage.getToken();
+  if (!token) return Error("unauthorized");
+
+  return client.get(
+    "/feed/retrieve-all",
+    {},
+    {
+      headers: {
+        "x-access-token": token,
+      },
+    }
+  );
+};
+
 export default {
   register,
   login,
   getCurrentUser,
   addFeed,
+  retrieveFeeds,
 };

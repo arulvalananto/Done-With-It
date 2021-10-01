@@ -3,11 +3,21 @@ const User = require("../models/user.model");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 
+exports.getAllFeed = catchAsync(async (req, res, next) => {
+  const feeds = await Feed.find({})
+    .sort({ createdAt: -1 })
+    .populate("createdBy")
+    .lean();
+
+  console.log(feeds);
+
+  res.status(200).json({ message: "Feeds retrieved", feeds });
+});
+
 exports.addFeed = catchAsync(async (req, res, next) => {
   if (req.files.length < 1) {
     return next(new AppError("feed must have at least one image"));
   }
-  console.log(req.files);
 
   const { title, price, category, description, location } = req.body;
   const images = req.files.map((image) => image.filename);

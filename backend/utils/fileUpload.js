@@ -7,6 +7,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
     const prefix = file.originalname.split(".")[0];
+    console.log(ext);
 
     cb(null, `feed-${prefix}-${Date.now()}.${ext}`);
   },
