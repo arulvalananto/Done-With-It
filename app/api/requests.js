@@ -16,7 +16,7 @@ const getCurrentUser = (token) =>
     }
   );
 
-const addFeed = async (feed, progress) => {
+const addFeed = async (feed) => {
   const data = new FormData();
   data.append("title", feed.title);
   data.append("price", feed.price);
@@ -38,7 +38,7 @@ const addFeed = async (feed, progress) => {
 
   return client.post("/feed/add", data, {
     headers: { "x-access-token": token },
-    onUploadProgress: (prog) => progress(prog.loaded / prog.total),
+    // onUploadProgress: (prog) => progress(prog.loaded / prog.total),
   });
 };
 

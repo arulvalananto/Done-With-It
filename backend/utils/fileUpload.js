@@ -1,16 +1,12 @@
 const multer = require("multer");
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads/");
-  },
   filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = file.mimetype.split("/")[1];
-    const prefix = file.originalname.split(".")[0];
-    console.log(ext);
-
-    cb(null, `feed-${prefix}-${Date.now()}.${ext}`);
+    cb(null, file.fieldname + "-" + uniqueSuffix + "." + ext);
   },
+  destination: "./uploads",
 });
 
 const fileFilter = (req, file, cb) => {
@@ -21,12 +17,10 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: {
-    fileSize: 1024 * 1024 * 10,
-  },
-});
+const limits = {
+  fileSize: 1024 * 1024 * 10,
+};
+
+const upload = multer({ storage, fileFilter, limits });
 
 module.exports = upload;

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 
@@ -14,10 +14,20 @@ import useAPI from "../hooks/useAPI";
 import requestApi from "../api/requests";
 import { feedsFetched } from "../redux/reducers/feeds.reducer";
 
+const prefix = "http://192.168.1.5:5000/uploads/";
+
 const Home = () => {
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await updateFeeds();
+    setRefreshing(false);
+  };
 
   const {
     data,
@@ -54,10 +64,12 @@ const Home = () => {
           <Card
             title={item.title}
             subTitle={"$" + item.price}
-            imageUrl={item.images[0]}
+            imageUrl={prefix + item.images[0]}
             onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
           />
         )}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
       />
     </SafeScreen>
   );

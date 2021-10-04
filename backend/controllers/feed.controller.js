@@ -9,8 +9,6 @@ exports.getAllFeed = catchAsync(async (req, res, next) => {
     .populate("createdBy")
     .lean();
 
-  console.log(feeds);
-
   res.status(200).json({ message: "Feeds retrieved", feeds });
 });
 
@@ -20,6 +18,7 @@ exports.addFeed = catchAsync(async (req, res, next) => {
   }
 
   const { title, price, category, description, location } = req.body;
+
   const images = req.files.map((image) => image.filename);
 
   const user = await User.findById(req.user.id);
@@ -39,8 +38,6 @@ exports.addFeed = catchAsync(async (req, res, next) => {
 
   user.feeds.push(feed._id);
   await user.save();
-
-  console.log(feed);
 
   res.status(201).json({ message: "Feed created", feed });
 });

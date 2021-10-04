@@ -21,7 +21,6 @@ const ListingDetails = () => {
       images,
     },
   } = useRoute();
-  console.log(prefix + images[0]);
 
   return (
     <>

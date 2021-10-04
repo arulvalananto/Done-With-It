@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/core";
 import * as Yup from "yup";
 
 import {
@@ -13,8 +14,10 @@ import SafeScreen from "../components/SafeScreen.component";
 import CategoryPickerItem from "../components/CategoryPickerItem.component";
 import useLocation from "../hooks/useLocation";
 import categories from "../data/categories";
-import UploadScreen from "./Upload.screen";
 import requestApi from "../api/requests";
+import useAPI from "../hooks/useAPI";
+import FormError from "../components/forms/FormError.component";
+import Loading from "../components/Loading.component";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -26,35 +29,25 @@ const validationSchema = Yup.object().shape({
 
 const ListingEdit = () => {
   const location = useLocation();
-  const [uploadVisible, setUploadVisible] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const navigation = useNavigation();
+
+  const { data, loading, error, request: addFeed } = useAPI(requestApi.addFeed);
 
   const handleSubmit = async (values, { resetForm }) => {
-    setProgress(0);
-    setUploadVisible(true);
+    await addFeed(values);
 
-    const result = await requestApi.addFeed(
-      { ...values, location },
-      (progress) => setProgress(progress)
-    );
+    navigation.navigate("Feed");
 
-    console.log(result);
-
-    if (!result.ok) {
-      setUploadVisible(false);
-      return Alert.alert(result.problem, "Couldn't able to adding feed");
-    }
-
-    resetForm(); // it's inside formikBAG on OnSubmit fun
+    resetForm(); // it's inside formikBAG on OnSubmit function
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <SafeScreen style={styles.container}>
-      <UploadScreen
-        onDone={() => setUploadVisible(false)}
-        progress={progress}
-        visible={uploadVisible}
-      />
+      <FormError message={error} />
       <Form
         initialValues={{
           title: "",
@@ -66,13 +59,21 @@ const ListingEdit = () => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <FormField maxLength={255} name="title" placeholder="Title" />
+        <FormField
+          maxLength={255}
+          name="title"
+          placeholder="Title"
+          returnKeyType="next"
+          returnKeyLabel="next"
+        />
         <FormField
           keyboardType="numeric"
           maxLength={8}
           name="price"
           placeholder="Price"
           width={120}
+          returnKeyType="next"
+          returnKeyLabel="next"
         />
         <Picker
           items={categories}
@@ -90,6 +91,8 @@ const ListingEdit = () => {
           name="description"
           numberOfLines={3}
           placeholder="Description"
+          returnKeyType="next"
+          returnKeyLabel="next"
         />
         <SubmitButton title="Post" />
       </Form>
