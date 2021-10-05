@@ -1,5 +1,5 @@
 export default Object.freeze({
-  LISTING_DETAILS: "ListingDetails",
+  FEED_DETAILS: "FeedDetails",
   MESSAGES: "Messages",
-  LISTING_EDIT: "ListingEdit",
+  FEED_ADD: "FeedAdd",
 });

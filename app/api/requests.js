@@ -17,11 +17,14 @@ const getCurrentUser = (token) =>
   );
 
 const addFeed = async (feed) => {
+  console.log(feed.description);
   const data = new FormData();
   data.append("title", feed.title);
   data.append("price", feed.price);
   data.append("category", feed.category.value);
   data.append("description", feed.description);
+  data.append("latitude", feed.location.latitude);
+  data.append("longitude", feed.location.longitude);
   feed.images.forEach((image, index) => {
     data.append("images", {
       name: "image" + index,
@@ -30,15 +33,10 @@ const addFeed = async (feed) => {
     });
   });
 
-  if (feed.location) {
-    data.append("location", feed.location);
-  }
-
   const token = await storage.getToken();
 
   return client.post("/feed/add", data, {
     headers: { "x-access-token": token },
-    // onUploadProgress: (prog) => progress(prog.loaded / prog.total),
   });
 };
 

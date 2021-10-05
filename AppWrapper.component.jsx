@@ -49,8 +49,6 @@ const AppWrapper = () => {
     }
   };
 
-  console.log(state);
-
   if (!isReady)
     return (
       <AppLoading
@@ -59,6 +57,8 @@ const AppWrapper = () => {
         onError={console.warn}
       />
     );
+
+  console.log(state);
 
   return (
     <>

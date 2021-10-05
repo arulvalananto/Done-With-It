@@ -19,7 +19,9 @@ const userSchema = mongoose.Schema({
     select: false,
   },
   pushNotificationToken: { type: String },
-  feeds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Feeds" }],
+  feeds: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Feeds", select: false },
+  ],
 });
 
 userSchema.methods.checkPassword = async function (

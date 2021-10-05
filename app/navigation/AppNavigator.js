@@ -6,10 +6,10 @@ import * as Permissions from "expo-permissions";
 
 import FeedNavigator from "./FeedNavigator";
 import AccountNavigator from "./AccountNavigator";
-import ListingEditScreen from "../screens/ListingEdit.screen";
 import NewListingButton from "./NewListingButton";
 import routes from "./routes";
 import expoPushTokenApi from "../api/expoPushToken";
+import FeedAddScreen from "../screens/FeedAdd.screen";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +33,7 @@ const AppNavigator = () => {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
-        name="Feed"
+        name="Feeds"
         component={FeedNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -42,19 +42,12 @@ const AppNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="ListingEdit"
-        component={ListingEditScreen}
+        name="FeedAdd"
+        component={FeedAddScreen}
         options={({ navigation }) => ({
           tabBarButton: () => (
             <NewListingButton
-              onPress={() => navigation.navigate(routes.LISTING_EDIT)}
-            />
-          ),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="plus-circle"
-              color={color}
-              size={size}
+              onPress={() => navigation.navigate(routes.FEED_ADD)}
             />
           ),
         })}

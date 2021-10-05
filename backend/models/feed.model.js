@@ -6,6 +6,9 @@ const feedSchema = mongoose.Schema(
       type: String,
       required: [true, "Feed should have a name"],
     },
+    description: {
+      type: String,
+    },
     images: [String],
     category: {
       type: String,

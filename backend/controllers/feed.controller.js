@@ -17,7 +17,9 @@ exports.addFeed = catchAsync(async (req, res, next) => {
     return next(new AppError("feed must have at least one image"));
   }
 
-  const { title, price, category, description, location } = req.body;
+  const { title, price, category, description, latitude, longitude } = req.body;
+
+  const location = { latitude, longitude };
 
   const images = req.files.map((image) => image.filename);
 

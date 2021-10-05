@@ -92,11 +92,12 @@ export default Picker;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.light,
-    borderRadius: 25,
+    borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     padding: 15,
-    marginVertical: 10,
+    marginVertical: 15,
   },
   icon: {
     marginRight: 15,

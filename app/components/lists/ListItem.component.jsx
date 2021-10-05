@@ -30,11 +30,11 @@ const ListItem = ({
               </Text>
             )}
           </View>
-          <MaterialCommunityIcons
+          {/* <MaterialCommunityIcons
             name="chevron-right"
             size={25}
             color={colors.medium}
-          />
+          /> */}
         </View>
       </TouchableHighlight>
     </Swipeable>

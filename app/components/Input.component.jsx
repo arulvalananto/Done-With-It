@@ -7,7 +7,7 @@ import defaultStyles from "../config/styles";
 
 const Input = ({ icon, style, width = "100%", ...otherProps }) => {
   return (
-    <View style={[styles.container, { width }]}>
+    <View style={[styles.container, { width }, style]}>
       {icon && (
         <MaterialCommunityIcons
           name={icon}
@@ -17,7 +17,7 @@ const Input = ({ icon, style, width = "100%", ...otherProps }) => {
         />
       )}
       <TextInput
-        style={[defaultStyles.text, style]}
+        style={defaultStyles.text}
         autoCorrect={false}
         autoCapitalize="none"
         {...otherProps}
@@ -31,7 +31,7 @@ export default Input;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.light,
-    borderRadius: 25,
+    borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
     padding: 15,
@@ -39,5 +39,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 15,
+  },
+  input: {
+    borderRadius: 5,
   },
 });

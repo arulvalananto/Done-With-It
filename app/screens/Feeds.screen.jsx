@@ -57,20 +57,24 @@ const Home = () => {
           <Button onPress={loadFeeds}>Retry</Button>
         </>
       )}
-      <FlatList
-        data={data.feeds}
-        keyExtractor={(data) => data._id.toString()}
-        renderItem={({ item }) => (
-          <Card
-            title={item.title}
-            subTitle={"$" + item.price}
-            imageUrl={prefix + item.images[0]}
-            onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
-          />
-        )}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-      />
+      {data?.feeds?.length ? (
+        <FlatList
+          data={data.feeds}
+          keyExtractor={(data) => data._id.toString()}
+          renderItem={({ item }) => (
+            <Card
+              title={item.title}
+              subTitle={"$" + item.price}
+              imageUrl={prefix + item.images[0]}
+              onPress={() => navigation.navigate(routes.FEED_DETAILS, item)}
+            />
+          )}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+        />
+      ) : (
+        <Text style={styles.noFeed}>No Feeds Available 😌</Text>
+      )}
     </SafeScreen>
   );
 };
@@ -84,6 +88,11 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   errorText: {
+    textAlign: "center",
+  },
+  noFeed: {
+    color: colors.primary,
+    fontWeight: "700",
     textAlign: "center",
   },
 });
